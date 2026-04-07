@@ -6,7 +6,9 @@ import face_recognition
 from PIL import Image
 from config import DATASET_PATH, ENCODING_PATH
 
-MATCH_TOLERANCE = 0.6
+# Stricter matching to reduce false positives on unseen faces.
+MATCH_TOLERANCE = 0.52
+MIN_DISTANCE_GAP = 0.04
 
 data = {"encodings": [], "names": []}
 
@@ -158,7 +160,15 @@ def recognize_face(image):
         best_idx = int(np.argmin(distances))
         best_distance = float(distances[best_idx])
 
-        if best_distance <= MATCH_TOLERANCE:
+        # Confidence gate: best match must be under threshold and
+        # clearly better than the second-best candidate.
+        if len(distances) > 1:
+            sorted_dist = np.sort(distances)
+            distance_gap = float(sorted_dist[1] - sorted_dist[0])
+        else:
+            distance_gap = MIN_DISTANCE_GAP
+
+        if best_distance <= MATCH_TOLERANCE and distance_gap >= MIN_DISTANCE_GAP:
             return data["names"][best_idx], locations
         return "Unknown", locations
 
