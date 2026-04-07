@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify, redirect
 import os, base64, cv2
 import numpy as np
 from datetime import datetime
@@ -9,12 +9,6 @@ from utils.face_utils import encode_faces, recognize_face
 from utils.attendance_utils import mark_attendance, get_attendance_records
 
 app = Flask(__name__)
-
-_LOCALHOSTS = {"127.0.0.1", "::1"}
-
-
-def _is_local_request() -> bool:
-    return request.remote_addr in _LOCALHOSTS
 
 
 def _decode_base64_image(img_data: str):
@@ -108,68 +102,9 @@ def _append_base64_registry(employee_id: str, name: str, images):
     _write_base64_registry(rows)
 
 
-@app.route("/")
-def dashboard():
-    return render_template("dashboard.html", can_register=_is_local_request())
-
-
-# ---------------- REGISTER API----------------
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    # Security: allow registration only from the same machine (PC),
-    # so mobile users can take attendance but cannot register new faces.
-    if not _is_local_request():
-        return jsonify({"status": "Registration disabled on this device/network"}), 403
-
-    if request.method == "POST":
-        data = request.json
-
-        user_id = data.get("user_id")
-        name = data.get("name")
-        images = data.get("images", [])
-
-        if not user_id or not name or not images:
-            return jsonify({"status": "Invalid Data"}), 400
-
-        _, saved_files = _save_registration_images(user_id, name, images)
-        if len(saved_files) == 0:
-            return jsonify({"status": "No valid images captured"}), 400
-
-        encode_faces()
-
-        return jsonify({"status": "Registered Successfully"})
-
-    return render_template("register.html")
-
-
-# ---------------- ATTENDANCE ----------------
-@app.route("/attendance", methods=["GET", "POST"])
-def attendance():
-    if request.method == "POST":
-        try:
-            img_data = request.json["image"]
-            img = _normalize_bgr_image(_decode_base64_image(img_data))
-            if img is None:
-                return jsonify({"status": "Invalid Image"})
-
-            name, _ = recognize_face(img)
-
-            if name == "No Data":
-                return jsonify({"status": "No Users Registered"})
-
-            if name not in ["Unknown", "No Face"]:
-                user_id, username = name.split("_", 1)
-                status = mark_attendance(user_id, username)
-
-                return jsonify({"status": status, "name": username})
-
-            return jsonify({"status": "Not Matched"})
-
-        except Exception as e:
-            print("Attendance Error:", e)
-            return jsonify({"status": "Error Occurred"})
-
-    return render_template("attendance.html")
+@app.route("/", methods=["GET"])
+def root():
+    return redirect("/api/docs")
 
 
 @app.route("/api/register-base64", methods=["POST"])
