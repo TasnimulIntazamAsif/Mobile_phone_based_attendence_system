@@ -3,25 +3,102 @@
 <div class="container">
 <h2>Attendance</h2>
 
-<video id="video" width="300" autoplay></video>
+<p id="statusText">Initializing camera...</p>
+<video id="video" width="300" autoplay muted playsinline></video>
+<input id="cameraInput" type="file" accept="image/*" capture="environment" style="display:none;">
 <button onclick="mark()">Mark Attendance</button>
 
 <script>
-navigator.mediaDevices.getUserMedia({video:true})
-.then(stream => video.srcObject = stream);
+const video = document.getElementById("video");
+const cameraInput = document.getElementById("cameraInput");
+const statusText = document.getElementById("statusText");
+let hasLiveCamera = false;
+let capturedImageDataUrl = null;
+
+function setStatus(msg){
+    statusText.innerText = msg;
+}
+
+function initCamera(){
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        enableUploadFallback("Live camera not supported. Use capture button.");
+        return;
+    }
+
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false
+    })
+    .then(stream => {
+        video.srcObject = stream;
+        hasLiveCamera = true;
+        setStatus("Camera ready. Tap Mark Attendance.");
+    })
+    .catch(() => {
+        if (!window.isSecureContext) {
+            enableUploadFallback("HTTP on mobile may block camera. Use capture button below.");
+        } else {
+            enableUploadFallback("Camera permission blocked. Use capture button below.");
+        }
+    });
+}
+
+function enableUploadFallback(message){
+    hasLiveCamera = false;
+    video.style.display = "none";
+    cameraInput.style.display = "block";
+    setStatus(message);
+}
+
+cameraInput.addEventListener("change", function(){
+    const file = this.files && this.files[0];
+    if (!file){
+        capturedImageDataUrl = null;
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e){
+        capturedImageDataUrl = e.target.result;
+        setStatus("Photo selected. Tap Mark Attendance.");
+    };
+    reader.readAsDataURL(file);
+});
+
+initCamera();
 
 function mark(){
-    let canvas=document.createElement("canvas");
-    canvas.width=300; canvas.height=200;
+    if (hasLiveCamera) {
+        let canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
 
-    let ctx=canvas.getContext("2d");
-    ctx.drawImage(video,0,0,300,200);
+        let ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        sendForAttendance(canvas.toDataURL("image/jpeg", 0.95));
+        return;
+    }
 
+    if (!capturedImageDataUrl){
+        alert("First capture/select an image.");
+        return;
+    }
+    sendForAttendance(capturedImageDataUrl);
+}
+
+function sendForAttendance(imageData){
     fetch("/attendance",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({image:canvas.toDataURL("image/jpeg")})
-    }).then(r=>r.json()).then(d=>alert(d.status));
+        body:JSON.stringify({image:imageData})
+    })
+    .then(r=>r.json())
+    .then(d=>{
+        alert(d.status);
+        setStatus(d.status);
+    })
+    .catch(()=>{
+        setStatus("Network error. Try again.");
+    });
 }
 </script>
 </div>

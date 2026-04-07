@@ -36,4 +36,11 @@ button:hover {
 video {
     border-radius: 10px;
     margin-top: 10px;
+    width: 100%;
+    max-width: 320px;
+}
+
+#statusText {
+    font-size: 14px;
+    color: #cbd5e1;
 }
