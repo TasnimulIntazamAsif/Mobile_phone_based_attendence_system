@@ -113,7 +113,7 @@ def dashboard():
     return render_template("dashboard.html", can_register=_is_local_request())
 
 
-# ---------------- REGISTER ----------------
+# ---------------- REGISTER API----------------
 @app.route("/register", methods=["GET", "POST"])
 def register():
     # Security: allow registration only from the same machine (PC),
