@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<div class="container">
+<h2>Attendance</h2>
+
+<video id="video" width="300" autoplay></video>
+<button onclick="mark()">Mark Attendance</button>
+
+<script>
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream => video.srcObject = stream);
+
+function mark(){
+    let canvas=document.createElement("canvas");
+    canvas.width=300; canvas.height=200;
+
+    let ctx=canvas.getContext("2d");
+    ctx.drawImage(video,0,0,300,200);
+
+    fetch("/attendance",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({image:canvas.toDataURL("image/jpeg")})
+    }).then(r=>r.json()).then(d=>alert(d.status));
+}
+</script>
+</div>
