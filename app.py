@@ -4,7 +4,7 @@ import numpy as np
 
 from config import DATASET_PATH
 from utils.face_utils import encode_faces, recognize_face
-from utils.attendance_utils import mark_attendance
+from utils.attendance_utils import mark_attendance, get_attendance_records
 
 app = Flask(__name__)
 
@@ -136,6 +136,130 @@ def attendance():
             return jsonify({"status": "Error Occurred"})
 
     return render_template("attendance.html")
+
+
+def _get_registered_users():
+    users = []
+    for folder_name in os.listdir(DATASET_PATH):
+        folder_path = os.path.join(DATASET_PATH, folder_name)
+        if not os.path.isdir(folder_path):
+            continue
+        if "_" in folder_name:
+            user_id, name = folder_name.split("_", 1)
+        else:
+            user_id, name = folder_name, folder_name
+        users.append({"id": user_id, "name": name})
+    return users
+
+
+@app.route("/api/stored-data", methods=["GET"])
+def api_stored_data():
+    attendance_records = get_attendance_records()
+    users = _get_registered_users()
+    return jsonify(
+        {
+            "attendance_records": attendance_records,
+            "registered_users": users,
+            "total_attendance_records": len(attendance_records),
+            "total_registered_users": len(users),
+        }
+    )
+
+
+@app.route("/api/openapi.json", methods=["GET"])
+def api_openapi():
+    host = request.host_url.rstrip("/")
+    return jsonify(
+        {
+            "openapi": "3.0.3",
+            "info": {
+                "title": "Mobile Attendance System API",
+                "version": "1.0.0",
+                "description": "API to inspect stored attendance and registered user data.",
+            },
+            "servers": [{"url": host}],
+            "paths": {
+                "/api/stored-data": {
+                    "get": {
+                        "summary": "Get stored system data",
+                        "description": "Returns attendance records from CSV and registered users from dataset folders.",
+                        "responses": {
+                            "200": {
+                                "description": "Stored data fetched successfully",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "attendance_records": {
+                                                    "type": "array",
+                                                    "items": {"$ref": "#/components/schemas/AttendanceRecord"},
+                                                },
+                                                "registered_users": {
+                                                    "type": "array",
+                                                    "items": {"$ref": "#/components/schemas/RegisteredUser"},
+                                                },
+                                                "total_attendance_records": {"type": "integer"},
+                                                "total_registered_users": {"type": "integer"},
+                                            },
+                                        }
+                                    }
+                                },
+                            }
+                        },
+                    }
+                }
+            },
+            "components": {
+                "schemas": {
+                    "AttendanceRecord": {
+                        "type": "object",
+                        "properties": {
+                            "ID": {"type": "string", "example": "570508"},
+                            "Name": {"type": "string", "example": "Asif"},
+                            "Date": {"type": "string", "example": "2026-04-07"},
+                            "Arrival": {"type": "string", "example": "13:22:08"},
+                            "Exit": {"type": "string", "example": "17:35:41"},
+                            "Status": {"type": "string", "example": "Exited"},
+                        },
+                    },
+                    "RegisteredUser": {
+                        "type": "object",
+                        "properties": {
+                            "id": {"type": "string", "example": "570508"},
+                            "name": {"type": "string", "example": "Asif"},
+                        },
+                    },
+                }
+            },
+        }
+    )
+
+
+@app.route("/api/docs", methods=["GET"])
+def api_docs():
+    # Lightweight Swagger UI without extra Python dependency
+    html = """
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Attendance API Docs</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+  </head>
+  <body style="margin:0;background:#fafafa;">
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script>
+      window.ui = SwaggerUIBundle({
+        url: "/api/openapi.json",
+        dom_id: "#swagger-ui"
+      });
+    </script>
+  </body>
+</html>
+"""
+    return html
 
 
 if __name__ == "__main__":

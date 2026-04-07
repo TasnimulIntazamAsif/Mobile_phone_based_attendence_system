@@ -73,3 +73,14 @@ def mark_attendance(user_id, name):
     df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     df.to_csv(CSV_PATH, index=False)
     return f"Arrival Marked ({current_time})"
+
+
+def get_attendance_records():
+    if not os.path.exists(CSV_PATH):
+        return []
+
+    df = pd.read_csv(CSV_PATH)
+    df = _ensure_schema(df)
+    # Replace NaN with empty strings for clean JSON output
+    df = df.fillna("")
+    return df.to_dict(orient="records")
