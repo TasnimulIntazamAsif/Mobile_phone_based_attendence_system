@@ -11,9 +11,13 @@ app = Flask(__name__)
 _LOCALHOSTS = {"127.0.0.1", "::1"}
 
 
+def _is_local_request() -> bool:
+    return request.remote_addr in _LOCALHOSTS
+
+
 @app.route("/")
 def dashboard():
-    return render_template("dashboard.html")
+    return render_template("dashboard.html", can_register=_is_local_request())
 
 
 # ---------------- REGISTER ----------------
@@ -21,7 +25,7 @@ def dashboard():
 def register():
     # Security: allow registration only from the same machine (PC),
     # so mobile users can take attendance but cannot register new faces.
-    if request.remote_addr not in _LOCALHOSTS:
+    if not _is_local_request():
         return jsonify({"status": "Registration disabled on this device/network"}), 403
 
     if request.method == "POST":
@@ -121,7 +125,7 @@ def attendance():
 
             if name not in ["Unknown", "No Face"]:
                 user_id, username = name.split("_", 1)
-                status = mark_attendance(user_id, username, True)
+                status = mark_attendance(user_id, username)
 
                 return jsonify({"status": status, "name": username})
 

@@ -1,3 +1,3 @@
-ID,Name,Date,Time,Status
-570508,Asif,2026-04-07,13:38:13,True
-570508,Asif,2026-04-07,13:42:03,True
+ID,Name,Date,Arrival,Exit,Status
+570508,Asif,2026-04-07,13:38:13,13:52:59,Exited
+570508,Asif,2026-04-07,13:42:03,,True
