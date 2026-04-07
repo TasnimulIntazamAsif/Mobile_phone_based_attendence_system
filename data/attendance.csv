@@ -1,3 +1,4 @@
 ID,Name,Date,Arrival,Exit,Status
-570508,Asif,2026-04-07,14:57:59,,Arrived
-570573,Miraz,2026-04-07,15:06:24,,Arrived
+570508,Asif,2026-04-07,14:57:59,15:27:47,Exited
+570573,Miraz,2026-04-07,15:06:24,15:36:39,Exited
+570510,Protap,2026-04-07,15:43:53,15:44:50,Exited
