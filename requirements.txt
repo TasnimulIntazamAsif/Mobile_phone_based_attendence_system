@@ -4,3 +4,4 @@ face-recognition
 numpy==1.26.4
 pandas==2.2.2
 pillow
+dlib-19.24.1-cp311-cp311-win_amd64.whl
