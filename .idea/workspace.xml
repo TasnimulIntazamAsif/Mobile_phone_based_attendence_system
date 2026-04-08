@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85252d48-a600-4103-9cb6-1a6023d6be0c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Mobile_phone_based_attendence_system.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Mobile_phone_based_attendence_system.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/attendance.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base64_registry.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dataset/570508_Asif/0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dataset/570510_Protap/0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dataset/570573_Miraz/0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/encodings.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/data/encodings.pkl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,12 +28,12 @@
     &quot;assignee&quot;: &quot;TasnimulIntazamAsif&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/TasnimulIntazamAsif/Mobile_phone_based_attendence_system.git",
-    "accountId": "de73ec4a-b7eb-4b31-b20b-b7a440b7af61"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/TasnimulIntazamAsif/Mobile_phone_based_attendence_system.git&quot;,
+    &quot;accountId&quot;: &quot;de73ec4a-b7eb-4b31-b20b-b7a440b7af61&quot;
   }
-}]]></component>
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -71,7 +63,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "D:/Mobile_phone_based_attendence_system",
+    "last_opened_file_path": "C:/D drive/Mobile_phone_based_attendence_system",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -110,8 +102,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
-        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
+        <option value="bundled-python-sdk-ca5e2b39c7df-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.308" />
       </set>
     </attachedChunks>
   </component>
