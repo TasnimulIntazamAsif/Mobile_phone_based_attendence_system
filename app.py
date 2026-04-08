@@ -243,26 +243,7 @@ def api_face_recognition_file():
     return jsonify({"status": "Face Recognition", "matched_name": matched_name})
 
 
-@app.route("/api/check_attendance", methods=["POST"])
-def api_check_attendance_file():
-    name = (request.form.get("name") or "").strip()
-    img = _decode_uploaded_file_image(request.files.get("image"))
-    if not name or img is None:
-        return jsonify({"result": 0, "status": "Bad request"}), 400
 
-    matched_name, _ = recognize_face(img)
-    if matched_name in ["No Data", "Unknown", "No Face", "Error"]:
-        return jsonify({"result": 0}), 200
-
-    ok = False
-    if matched_name == name:
-        ok = True
-    elif "_" in matched_name:
-        mid, mname = matched_name.split("_", 1)
-        if name == mid or name == mname:
-            ok = True
-
-    return jsonify({"result": 1 if ok else 0}), 200
 
 @app.route("/api/train_with_multiple_image", methods=["POST"])
 def api_train_with_multiple_image():
