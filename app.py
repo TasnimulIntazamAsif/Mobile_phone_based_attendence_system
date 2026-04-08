@@ -309,12 +309,7 @@ def api_remove_name():
     return jsonify({"status": "Name removed successfully."}), 200
 
 
-@app.route("/remove_all", methods=["POST"])
-def api_remove_all():
-    removed = _clear_all_data_except_base()
-    if not removed:
-        return jsonify({"status": "No data found or other errors."}), 400
-    return jsonify({"status": "Data removed successfully."}), 200
+
 
 
 @app.route("/etc/convert_image_to_base64", methods=["POST"])
