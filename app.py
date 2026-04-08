@@ -264,7 +264,6 @@ def api_check_attendance_file():
 
     return jsonify({"result": 1 if ok else 0}), 200
 
-
 @app.route("/api/train_with_multiple_image", methods=["POST"])
 def api_train_with_multiple_image():
     user_id = (request.form.get("id") or "").strip()
@@ -278,6 +277,7 @@ def api_train_with_multiple_image():
 
     encode_faces()
     return jsonify({"status": "Faces trained successfully.", "saved_images": len(saved)}), 200
+
 
 
 @app.route("/api/single_image_train", methods=["POST"])
