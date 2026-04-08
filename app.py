@@ -380,6 +380,38 @@ def base64_check_attendance():
     return jsonify({"result": 1 if ok else 0}), 200
 
 
+@app.route("/base64/train", methods=["POST"])
+def base64_train():
+    payload = request.get_json(silent=True) or {}
+    user_id = payload.get("id")
+    images = payload.get("images")
+
+    if not user_id or images is None:
+        return jsonify({"status": "Bad request. Missing id or images, or id is not an integer."}), 400
+
+    if isinstance(images, str):
+        images_list = [images]
+    elif isinstance(images, list):
+        images_list = images
+    else:
+        return jsonify({"status": "Bad request. Missing id or images, or id is not an integer."}), 400
+
+    _, saved_files = _save_registration_images(str(user_id), str(user_id), images_list)
+    if len(saved_files) == 0:
+        return jsonify({"status": "Internal server error"}), 500
+
+    _append_base64_registry(str(user_id), str(user_id), images_list)
+    encode_faces()
+    return jsonify({"status": "Faces trained successfully.", "saved_images": len(saved_files)}), 200
+
+
+# --- Documentation only (not part of the 11 functional POST APIs) ---
+def _multipart_schema(required, properties):
+    return {
+        "type": "object",
+        "required": required,
+        "properties": properties,
+    }
 
 
 @app.route("/", methods=["GET"])
