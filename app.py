@@ -359,7 +359,25 @@ def base64_face_recognition():
     return jsonify({"status": "Face Recognition", "matched_name": matched_name}), 200
 
 
+@app.route("/base64/check_attendance", methods=["POST"])
+def base64_check_attendance():
+    payload = request.get_json(silent=True) or {}
+    provided_id = str(payload.get("id", "")).strip()
+    img = _normalize_bgr_image(_decode_base64_image(payload.get("image", "")))
+    if not provided_id or img is None:
+        return jsonify({"result": 0, "status": "Bad request"}), 400
 
+    matched_name, _ = recognize_face(img)
+    if matched_name in ["No Data", "Unknown", "No Face", "Error"]:
+        return jsonify({"result": 0}), 200
+
+    ok = False
+    if matched_name == provided_id:
+        ok = True
+    elif "_" in matched_name:
+        mid, _ = matched_name.split("_", 1)
+        ok = mid == provided_id
+    return jsonify({"result": 1 if ok else 0}), 200
 
 
 @app.route("/base64/train", methods=["POST"])
