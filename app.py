@@ -264,7 +264,19 @@ def api_check_attendance_file():
 
     return jsonify({"result": 1 if ok else 0}), 200
 
+@app.route("/api/train_with_multiple_image", methods=["POST"])
+def api_train_with_multiple_image():
+    user_id = (request.form.get("id") or "").strip()
+    files = request.files.getlist("files")
+    if not user_id or not files:
+        return jsonify({"status": "Bad request. Missing id or not enough images."}), 400
 
+    _, saved = _save_uploaded_images(user_id, user_id, files)
+    if len(saved) == 0:
+        return jsonify({"status": "Internal server error. No face detected or other errors."}), 500
+
+    encode_faces()
+    return jsonify({"status": "Faces trained successfully.", "saved_images": len(saved)}), 200
 
 
 
