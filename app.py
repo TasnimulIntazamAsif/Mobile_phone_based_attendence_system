@@ -317,19 +317,7 @@ def api_remove_all():
     return jsonify({"status": "Data removed successfully."}), 200
 
 
-@app.route("/etc/convert_image_to_base64", methods=["POST"])
-def api_convert_image_to_base64():
-    img_fs = request.files.get("image")
-    if img_fs is None:
-        return jsonify({"status": "Invalid Image"}), 400
-    try:
-        raw = img_fs.read()
-        if not raw:
-            return jsonify({"status": "Invalid Image"}), 400
-        b64 = base64.b64encode(raw).decode("utf-8")
-        return jsonify({"base64": f"data:{img_fs.mimetype or 'image/jpeg'};base64,{b64}"}), 200
-    except Exception:
-        return jsonify({"status": "Invalid Image"}), 400
+
 
 
 @app.route("/detection/human", methods=["POST"])
