@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85252d48-a600-4103-9cb6-1a6023d6be0c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Mobile_phone_based_attendence_system.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Mobile_phone_based_attendence_system.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/attendance.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base64_registry.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dataset/570508_Asif/0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dataset/570510_Protap/0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dataset/570573_Miraz/0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/encodings.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/data/encodings.pkl" afterDir="false" />
-    </list>
+    <list default="true" id="85252d48-a600-4103-9cb6-1a6023d6be0c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -125,7 +115,7 @@
       <workItem from="1775541855774" duration="10035000" />
       <workItem from="1775553828602" duration="3497000" />
       <workItem from="1775558431795" duration="28000" />
-      <workItem from="1775619912691" duration="2567000" />
+      <workItem from="1775619912691" duration="3162000" />
     </task>
     <servers />
   </component>
