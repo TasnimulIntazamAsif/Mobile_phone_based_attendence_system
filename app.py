@@ -349,6 +349,14 @@ def api_detection_human():
     return jsonify({"result": int(result)}), 200
 
 
+@app.route("/base64/face_recognition", methods=["POST"])
+def base64_face_recognition():
+    payload = request.get_json(silent=True) or {}
+    img = _normalize_bgr_image(_decode_base64_image(payload.get("image", "")))
+    if img is None:
+        return jsonify({"status": "Invalid Image"}), 400
+    matched_name, _ = recognize_face(img)
+    return jsonify({"status": "Face Recognition", "matched_name": matched_name}), 200
 
 
 @app.route("/base64/check_attendance", methods=["POST"])
